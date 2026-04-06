@@ -1,4 +1,4 @@
-const API = '';
+const API = 'https://jdhva-nova.hf.space';
 
 let lang        = 'es';
 let ui          = {};
