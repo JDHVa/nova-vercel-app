@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-en="Nova - Medical AI" data-es="Nova - Medicina IA">Nova</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;500;600;700;900&family=Nunito:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/styles.css">
+</head>
+<body>
+    <canvas id="canvas"></canvas>
+    <div id="app">
+    
+    <header>
+        <div class="logo">
+            <div class="logo-icon">N</div>
+            <div class="logo-text">
+                <span class="logo-name">Nova</span>
+                <span class="logo-sub" data-es="Asistente Medico Asistido con IA" data-en="Medical Assistant Assisted by AI">Asistente Medico Asistido con IA</span>
+            </div>
+            <div class="status-dot"></div>
+        </div>
+
+    <nav class="tabs">
+        <button class="tab active" id="tab-chat" onclick="switchTab('chat')">
+            <span class="tab-icon"></span>
+            <span data-es="Asistente" data-en="Assistant">Asistente</span>
+        </button>
+        <button class="tab" id="tab-xray" onclick="switchTab('xray')">
+            <span class="tab-icon"></span>
+            <span data-es="Rayos X" data-en="X-rays">Rayos X</span>
+        </button>
+    </nav>
+
+    <div class="lang">
+        <button class="lang-btn active" id="btn-es" onclick="setLang('es')">ES</button>
+        <span class="lang-sep">|</span>
+        <button class="lang-btn" id="btn-en" onclick="setLang('en')">EN</button>
+    </div>
+    </header>
+    <section class="section active" id="section-chat">
+        <div class="hero">
+            <div class="hero-text">
+                <h1><span data-en="Your medical Asistant potenced by AI" data-es="Tu asistente medico potenciado por IA">Tu asistente medico potenciado por IA</span><br>Inteligente 24/7</h1>
+                <p data-es="Habla con Nova para obtener respuestas rápidas a tus preguntas médicas, consejos de salud personalizados y apoyo en la gestión de tu bienestar." data-en="Chat with Nova for quick answers to your medical questions, personalized health advice, and support in managing your well-being.">Habla con Nova para obtener respuestas rápidas a tus preguntas médicas, consejos de salud personalizados y apoyo en la gestión de tu bienestar.</p>
+            </div>
+            <div class="hero-badge">
+                <div class="hero-pulse">
+                    <div class="hero-pulse-inner"></div>
+                </div>
+                <span class="hero-label">NOVA AI</span>
+            </div>
+        </div>
+
+        <div class="chat-layout">
+            <aside class="chat-sidebar">
+                <div class="card">
+                    <div class="card-title" id="quick-title">Preguntas rápidas</div>
+                    <div id="quick-buttons-container"></div>    
+                    
+                </div>
+                <div class="card">
+                    <div class="card-title" data-es="Como funciona el asistente" data-en="How does the assistant work?">Como funciona el asistente</div>
+                    <div class="info-item">
+                        <span class="info-icon"></span>
+                        <span class="info-text" data-es="El asistente te ayuda a identificar posibles condiciones médicas basadas en los síntomas que describes." data-en="The assistant helps you identify possible medical conditions based on the symptoms you describe.">El asistente te ayuda a identificar posibles condiciones médicas basadas en los síntomas que describes.</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-icon"></span>
+                        <span class="info-text" data-es="Indica tu presupuesto para que el asistente te pueda decir que medicamente puedes tomar deacuerdo al dinero que dispones." data-en="Enter your budget to receive medication recommendations based on your financial constraints.">Indica tu presupuesto para que el asistente te pueda decir que medicamente puedes tomar deacuerdo al dinero que dispones.</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-icon"></span>
+                        <span class="info-text" data-es="NOVA, es un proyecto meramente informatico e informativo siempre consulta un medico." data-en="NOVA is a purely informational project. Always consult a doctor.">NOVA, es un proyecto meramente informatico e informativo siempre consulta un medico.</span>
+                    </div>
+                </div>
+            </aside>
+            <div class="chat-main">
+                <div class="chat-messages" id="chat-messages">
+                    <!-- Los mensajes se mostraran aqui, por medio de JavaScript -->
+                </div>
+                <div class="chat-input-area">
+                    <div class="budget-row">
+                        <span class="budget-label" data-en="Budget" data-es="Presupuesto">Presupuesto:</span>
+                        <input type="text" class="budget-input" id="budget-input" placeholder="Ej: 200 mxn, o sin limite", data-placeholder-es="Ej: 200 mxn o sin limite"
+                        data-placeholder-en="E.g: 10 USD or not limit">
+                    </div>                    
+                    <div class="input-row">
+                        <textarea class="msg-input" id="msg-input" rows="1"
+                        placeholder="Ej: Que sintomas tienes ahora mismo?"
+                        data-placeholder-en="E.g: Which symptoms do you have right now"
+                        data-es="Ej: Que sintomas tienes ahora mismo?"
+                        onkeydown="handleKey(event)"></textarea>
+                        <button class="send-btn" id="send-btn" onclick="sendMessage()" title="Enviar">Enviar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" id="section-xray">
+        <div class="hero">
+            <div class="hero-text">
+                <h1><span data-es="Analisis de" data-en="Chest">Analisis de</span><br><span>Radiografias</span> <span data-es="con IA" data-en="X-Ray Analysis">con IA</span></h1>
+                <p data-es="Sube un radiografia de tu torax o de cualqueir segmento del cuerpo que quieras, selecciona esa seccion para que el modelo pueda tener un mejor rango de exactitud" data-en="Upload a X-Ray, of your torax or any other part of your body that you want it, the select it, to help the model have a better accuracy range">Sube una radiografía de tu torax o de cualquier otro segmento del cuerpo que quieras, selecciona esa sección para que el modelo pueda tener un mejor rango de exactitud</p>
+            </div>
+            <div class="hero-badge">
+                <div class="hero-pulse">
+                    <div class="hero-pulse-inner"></div>
+                </div>
+                <span class="hero-label">X-ray AI</span>
+
+            </div>
+        </div>
+
+        <div class="xray-layout">
+            <div class="upload-zone" id="upload-zone" onclick="triggerUpload()"
+            ondragover="onDragOver(event)"
+            ondragleave="onDragLeave(event)"
+            ondrop="onDrop(event)">
+            <img id="xray-preview" alt="X-ray preview">
+                <!-- Aqui se suben las imagenes por medio de JavaScript -->
+            <div id="upload-placeholder">
+                <div class="upload-icon"></div>
+                <div class="upload-title" data-es="Arrastra y suelta una radiografía aquí" data-en="Drag and drop an X-Ray here">Arrastra y suelta una radiografía aquí</div>
+                <div class="upload-sub" data-es="o haz clic para seleccionar" data-en="or click to select">o haz clic para seleccionar</div>
+                <div class="upload-tag">JPG ~ PNG</div>
+            </div>
+            <input type="file" id="file-input" accept="image/jpeg,image/png" onchange="onFileSelected(event)">
+            <div class="upload-controls" id="upload-controls" style="margin-top: 16px; display: none;">
+                <button class="btn btn-primary" id="analyze-btn" onclick="event.stopPropagation(); analyzeXray()">
+                    <span></span> 
+                    <span data-es="Analizar Radiografias" data-en="Analyze X-Rays">Analizar Radiografias</span>
+                </button>
+                <button class="btn btn-ghost" onclick="event.stopPropagation(); resetXray()">
+                    <span></span> 
+                    <span data-es="Nueva Imagen" data-en="New Image">Nueva Imagen</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="results-panel" id="results-panel">
+            <div class="results-empty" id="results-empty">
+                <div class="results-empty-icon"></div>
+                <div class="results-empty-text" data-es="Los resultados del analisis se mostraran aqui una vez que subas una radiografia" data-en="Analysis results will be displayed here once you upload an X-Ray">Los resultados del analisis se mostraran aqui una vez que subas una radiografia</div>
+
+            </div>
+            <div id="results-content" style="display: none;">
+                <!-- Los resultados del analisis se mostraran aqui por medio de JavaScript asi que si quieres checarlo ve mjr a main.js -->
+            </div>
+        </div>
+    </section>
+    </div>
+
+    <div id="toast"></div>
+    <script src="/static/js/main.js"></script>
+</body>
+</html>
